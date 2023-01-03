@@ -1,8 +1,11 @@
 import React from "react";
+import { useGithubUser } from "./fetchGithubUser";
 import GeneralFetch from "./GeneralFetch";
 import { Random } from "./reactQueryFetch";
 const Lesson1 = () => {
-  const { data, isLoading, isFetching, refetch } = Random();
+  const { data, isLoading, refetch, isFetching } = Random();
+  const c = useGithubUser("SadiaMou007");
+
   return (
     <div className="app">
       <div className="app">
@@ -12,9 +15,11 @@ const Lesson1 = () => {
       <div className="app">
         <h2>Fetch using react query</h2>
         <button onClick={() => refetch()}>
-          Click to refetch:
-          {isLoading || isFetching ? "..." : data}
+          Click to refetch:{isLoading || isFetching ? "..." : data}
         </button>
+      </div>
+      <div className="app">
+        <h2>Fetch github user data using react query</h2>
       </div>
     </div>
   );
