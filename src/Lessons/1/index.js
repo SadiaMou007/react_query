@@ -2,6 +2,7 @@ import React from "react";
 import { useGithubUser } from "./fetchGithubUser";
 import GeneralFetch from "./GeneralFetch";
 import { Random } from "./reactQueryFetch";
+import CheckStatus from "./practiceApi";
 const Lesson1 = () => {
   const { data, isLoading, refetch, isFetching } = Random();
   const c = useGithubUser("SadiaMou007");
@@ -20,6 +21,10 @@ const Lesson1 = () => {
       </div>
       <div className="app">
         <h2>Fetch github user data using react query</h2>
+      </div>
+      <div className="app">
+        <h2>Practice query</h2>
+        <CheckStatus />
       </div>
     </div>
   );
