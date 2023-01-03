@@ -1,10 +1,17 @@
 import React from "react";
 import GeneralFetch from "./GeneralFetch";
+import { ReactQueryFetch } from "./reactQueryFetch";
 const Lesson1 = () => {
   return (
-    <div>
-      <GeneralFetch />
-    </div>
+    <>
+      <div className="app">
+        <GeneralFetch />
+      </div>
+      <div className="app">
+        {" "}
+        <ReactQueryFetch />
+      </div>
+    </>
   );
 };
 
