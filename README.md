@@ -86,6 +86,7 @@ export default function App() {
 - Query key array can contain any primitive or non-primitive data.
 ````  useQuery(["users", 1], fetchUser);
 useQuery(["labels", labelName], fetchLabel);
-useQuery(["issues", {completed: false}], fetchIssues); ```
+useQuery(["issues", {completed: false}], fetchIssues);  ```  
+
 ### Query Function
 - Make data request
