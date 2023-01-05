@@ -85,11 +85,14 @@ export default function App() {
 - It's like useEffect dependency array, query will refetch if key changed.
 - Query key array can contain any primitive or non-primitive data.
 
-````  
+```
 useQuery(["users", 1], fetchUser);
 useQuery(["labels", labelName], fetchLabel);
 useQuery(["issues", {completed: false}], fetchIssues);  
 ```  
+- Key should follow ` Generic To Specific `  pattern  with a starting string which identify the kind of data.  
+``` useQuery(["issues", owner, repo], queryFn); ``` This pattern will help to accidentally creating duplicate query keys.
+
 
 ### Query Function
 - Make data request
