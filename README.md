@@ -32,6 +32,35 @@ Client data could be stored using - useState, useReducer hook or third party sta
 
 - import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 - const queryClient = new QueryClient();
+## Example 
+```  
+import * as React from "react";
+import { useQuery } from "react-query";
+
+export default function App() {
+  const labelsQuery = useQuery(["labels"], () => {
+    return fetch("https://ui.dev/api/courses/react-query/labels").then((res) =>
+      res.json()
+    );
+  });
+  const labels = labelsQuery.data;
+  return (
+    <div>
+      <h1>Labels</h1>
+      {labelsQuery.isLoading && <p>Loading...</p>}
+      {labelsQuery.isSuccess && (
+        <ul>
+          {labels.map((label) => (
+            <li key={label.id}>
+              <span style={{ color: label.color }}></span> {label.name}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}  
+```
 - Wrap <app/> by QueryClientProvider with client={queryClient} prop
 
   ` <QueryClientProvider client={queryClient}>
