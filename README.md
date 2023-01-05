@@ -32,6 +32,24 @@ Client data could be stored using - useState, useReducer hook or third party sta
 
 - import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 - const queryClient = new QueryClient();
+
+- Wrap <app/> by QueryClientProvider with client={queryClient} prop
+
+  ` <QueryClientProvider client={queryClient}>
+  <App />
+</QueryClientProvider>`
+
+### Terms:
+
+- QueryClient: keeps query `cache`, Tracks `query state`.
+- QueryClientProvider: Context provider that makes react query available anywhere in application.
+
+### useQuery
+
+- accepts 2 argument:  
+  query key(array used to keep track query in the cache, if key change it will refetch)  
+  query function()
+  
 ## Example 
 ```  
 import * as React from "react";
@@ -61,19 +79,3 @@ export default function App() {
   );
 }  
 ```
-- Wrap <app/> by QueryClientProvider with client={queryClient} prop
-
-  ` <QueryClientProvider client={queryClient}>
-  <App />
-</QueryClientProvider>`
-
-### Terms:
-
-- QueryClient: keeps query `cache`, Tracks `query state`.
-- QueryClientProvider: Context provider that makes react query available anywhere in application.
-
-### useQuery
-
-- accepts 2 argument:  
-  query key(array used to keep track query in the cache, if key change it will refetch)  
-  query function()
