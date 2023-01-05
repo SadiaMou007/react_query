@@ -84,9 +84,12 @@ export default function App() {
 - Identify query
 - It's like useEffect dependency array, query will refetch if key changed.
 - Query key array can contain any primitive or non-primitive data.
-````  useQuery(["users", 1], fetchUser);
+
+````  
+useQuery(["users", 1], fetchUser);
 useQuery(["labels", labelName], fetchLabel);
-useQuery(["issues", {completed: false}], fetchIssues);  ```  
+useQuery(["issues", {completed: false}], fetchIssues);  
+```  
 
 ### Query Function
 - Make data request
