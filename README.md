@@ -97,8 +97,8 @@ useQuery(["issues", {completed: false}], fetchIssues);
 ## Query Function
 - Make data request
 ### Query function argument  
-
-- 1st parameter is an object containing query keys. So we can use key values as Query Function Arguments
+1.   Can pass any parameter to query function like arrow function.
+2.   1st parameter is an object containing query keys. So we can use key values as Query Function Arguments
 ```  
 async function getGithubUser({ queryKey }) {
   const [user, username] = queryKey;
