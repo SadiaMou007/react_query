@@ -113,5 +113,21 @@ const User = ({ username }) => {
     getGithubUser,
   );  
   ```  
-  
+### Queries with custom hook  
+```   
+function useGithubIssuesQuery({ owner, repo}) {
+  function getIssues() {
+    return fetch(
+      `https://api.github.com/repos/${owner}/${repo}/issues` : ""
+      }`,
+    ).then(res => res.json());
+  }
+
+  return useQuery(
+    ["issues", owner, repo],
+    getIssues
+  );
+}
+```  
+
 
