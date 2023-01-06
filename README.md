@@ -79,8 +79,8 @@ export default function App() {
   );
 }  
 ```  
-## 2 Querying Data
-### Query keys
+# 2 Querying Data
+## Query keys
 - Identify query
 - It's like useEffect dependency array, query will refetch if key changed.
 - Query key array can contain any primitive or non-primitive data.
@@ -94,5 +94,24 @@ useQuery(["issues", {completed: false}], fetchIssues);
 ``` useQuery(["issues", owner, repo], queryFn); ``` This pattern will help to accidentally creating duplicate query keys.
 
 
-### Query Function
+## Query Function
 - Make data request
+### Query function argument  
+
+- 1st parameter is an object containing query keys. So we can use key values as Query Function Arguments
+```  
+async function getGithubUser({ queryKey }) {
+  const [user, username] = queryKey;
+
+  return fetch(`https://api.github.com/users/${username}`)
+    .then((res) => res.json());
+};
+
+const User = ({ username }) => {
+  const userQuery = useQuery(
+    ["user", username],
+    getGithubUser,
+  );  
+  ```  
+  
+
