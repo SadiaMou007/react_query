@@ -1,7 +1,6 @@
 import React from "react";
 import { useGithubUser } from "./fetchGithubUser";
 import GeneralFetch from "./GeneralFetch";
-import { Random } from "./reactQueryFetch";
 import CheckStatus from "./practiceApi";
 import { useRandomNumber } from "./fetchRandomNumber";
 
