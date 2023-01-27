@@ -3,8 +3,12 @@ import { useGithubUser } from "./fetchGithubUser";
 import GeneralFetch from "./GeneralFetch";
 import { Random } from "./reactQueryFetch";
 import CheckStatus from "./practiceApi";
+import { useRandomNumber } from "./fetchRandomNumber";
+
 const Lesson1 = () => {
-  const { data, isLoading, refetch, isFetching } = Random();
+
+  const {data1,isData1Fetching,isData1Loading,refetchData1}=useRandomNumber()
+
   const c = useGithubUser("SadiaMou007");
 
   return (
@@ -15,13 +19,11 @@ const Lesson1 = () => {
       </div>
       <div className="app">
         <h2>Fetch using react query</h2>
-        <button onClick={() => refetch()}>
-          Click to refetch:{isLoading || isFetching ? "..." : data}
+        <button onClick={() => refetchData1()}>
+          Click to refetch:{isData1Fetching || isData1Loading ? "..." : data1}
         </button>
       </div>
-      <div className="app">
-        <h2>Fetch github user data using react query</h2>
-      </div>
+      
       <div className="app">
         <h2>Practice query</h2>
         <CheckStatus />

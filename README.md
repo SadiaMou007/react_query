@@ -13,8 +13,7 @@ Client data could be stored using - useState, useReducer hook or third party sta
 ### Server State:
 
 - Stored remotely - The client has no control over what is stored or how it is stored.
-  Asynchronous
-- It takes a bit of time for the data to come from the server to the client(network request: send - process - response back).
+- Asynchronous - It takes a bit of time for the data to come from the server to the client(network request: send - process - response back).
 - Owned by many users - Multiple users could change the data.
 
 ### How React Query Solves Server State.
@@ -51,33 +50,35 @@ Client data could be stored using - useState, useReducer hook or third party sta
   query function()
   
 ## Example 
-```  
-import * as React from "react";
-import { useQuery } from "react-query";
+***  Lesson 1 - fetchRandomNumber.js  
 
-export default function App() {
-  const labelsQuery = useQuery(["labels"], () => {
-    return fetch("https://ui.dev/api/courses/react-query/labels").then((res) =>
-      res.json()
-    );
-  });
-  const labels = labelsQuery.data;
-  return (
-    <div>
-      <h1>Labels</h1>
-      {labelsQuery.isLoading && <p>Loading...</p>}
-      {labelsQuery.isSuccess && (
-        <ul>
-          {labels.map((label) => (
-            <li key={label.id}>
-              <span style={{ color: label.color }}></span> {label.name}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
+
+```  
+import { useQuery } from "@tanstack/react-query";
+
+const fetchNumber = () => {
+    return fetch(
+      "https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain&rnd=new"
+    ).then((response) => {
+      if (response.status !== 200) {
+        throw new Error(`Something went wrong. Try again.`);
+      }
+      return response.json();
+    });
+  };
+  
+
+const useRandomNumber=()=>{
+    const {data : data1
+    isLoading : isData1Loading,
+    isFetching : isData1Fetching,
+    refetch : refetchData1
+    } = useQuery (['random'], fetchNumber)
+    
+    return {data1, isData1Loading, isData1Fetching, refetchData1}
 }  
+
+export {useRandomNumber}
 ```  
 # 2 Querying Data
 ## Query keys
