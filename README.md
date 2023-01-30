@@ -108,16 +108,15 @@ const issuesQuery = useQuery(
       },
     ],
     queryFn
-  ); ```
+  ); 
+  ```
   
-
-
 ## Query Function
 - Make data request
 ### Query function argument  
 1.   Can pass any parameter to query function like arrow function.
 2.   1st parameter is an object containing query keys. So we can use key values as Query Function Arguments
-```  
+
 async function getGithubUser({ queryKey }) {
   const [user, username] = queryKey;
 
@@ -131,8 +130,11 @@ const User = ({ username }) => {
     getGithubUser,
   );  
   ```  
+  
 ### Queries with custom hook  
-```   
+
+```  
+
 function useGithubIssuesQuery({ owner, repo}) {
   function getIssues() {
     return fetch(
