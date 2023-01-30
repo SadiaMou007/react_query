@@ -93,6 +93,23 @@ useQuery(["issues", {completed: false}], fetchIssues);
 ```  
 - Key should follow ` Generic To Specific `  pattern  with a starting string which identify the kind of data.  
 ``` useQuery(["issues", owner, repo], queryFn); ``` This pattern will help to accidentally creating duplicate query keys.
+- When use Objects in Query Keys??
+When we are filtering by more than one thing and any parameter can refetch the query without breaking the order.
+```  
+const issuesQuery = useQuery(
+    [
+      "issues",
+      owner,
+      repo,
+      { 
+        state: issueState, 
+        assignee,
+        labels: labels || undefined 
+      },
+    ],
+    queryFn
+  ); ```
+  
 
 
 ## Query Function
