@@ -180,4 +180,26 @@ export { getUserData };
  const { userData: createdByUser } = getUserData(createdBy);  
 ```  
 
+### Parallel Query  
+- It combining the two requests into a single query. We use the ` Promise.all ` helper to load both requests in parallel in the query function, pass that to a single useQuery hook, and get results from both at the same time.  
+```  
+function getReposAndGists(username) {
+  return Promise.all([
+    fetch(`https://api.github.com/users/${username}/repos`)
+      .then((res) => res.json()),
+    fetch(`https://api.github.com/users/${username}/gists`)
+      .then((res) => res.json())
+  ]);
+}
 
+const ReposAndGists = ({ username }) => {
+  const reposAndGistsQuery = useQuery(
+    ["reposAndGists", username],
+    () => getReposAndGists(username),
+  );
+  
+const [repos, gists] = reposAndGistsQuery.data;
+
+ ```  
+ - useQueries : accepts an array of query options and returns an array of query results. [React query docs](https://tanstack.com/query/latest/docs/react/reference/useQueries?from=reactQueryV3&original=https%3A%2F%2Ftanstack.com%2Fquery%2Fv3%2Fdocs%2Freference%2FuseQueries)
+ 
