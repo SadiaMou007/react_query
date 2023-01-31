@@ -214,27 +214,47 @@ const [repos, gists] = reposAndGistsQuery.data;
 ```  
 - To avoid long time Loding in UI (for second query data), we can use `fetchStatus` .If status is loading and fetchStatus is idle, then we can know the query is disabled. 
 - querying two APIs. (labels & issues). Where issues are dependent to labels Id. ( Use label Id as parameter for fetch issues)
+
 ```  
+
 export default function App() {
+  const [id, setId] = useState(null);
+  const { data: labels, isLoading: isLabelLoading } = useQuery(["labels"], () =>
+    fetch(`https://ui.dev/api/courses/react-query/labels`).then((res) =>
+      res.json()
+    )
+  );
 
-  const [id,setId]=useState(null)
-  const {data:labels,isLoading:isLabelLoading}=useQuery(['labels'],()=>
-    fetch(`https://ui.dev/api/courses/react-query/labels`)
-    .then(res=>res.json())
-  )
-  
-  const {data:issues,isLoading:isIssuesLoading,fetchStatus}=useQuery(['issues',{id}],()=>
-    fetch(`https://ui.dev/api/courses/react-query/issues?/labels[]=${id}`)
-    .then(res=>res.json()),
-    {enabled: !!id}
-  )
+  const { data: issues, isLoading: isIssuesLoading, fetchStatus } = useQuery(
+    ["issues", { id }],
+    () =>
+      fetch(
+        `https://ui.dev/api/courses/react-query/issues?/labels[]=${id}`
+      ).then((res) => res.json()),
+    { enabled: !!id }
+  );
 
-  return <div>
-    {isLabelLoading? <p>Loading..</p>:labels.map(label=>  <div><button onClick={()=>setId(label.id)}>{label.name}</button></div>)}
-    {fetchStatus==='idle' && isIssuesLoading?null:
-    isIssuesLoading? <p>Loading..</p>:issues.map(issue=>  <li>{issue.title}</li>)}
-  </div>;
+  return (
+    <div>
+      {isLabelLoading ? (
+        <p>Loading..</p>
+      ) : (
+        labels.map((label) => (
+          <div>
+            <button onClick={() => setId(label.id)}>{label.name}</button>
+          </div>
+        ))
+      )}
+      {fetchStatus === "idle" && isIssuesLoading ? null : isIssuesLoading ? (
+        <p>Loading..</p>
+      ) : (
+        issues.map((issue) => <li>{issue.title}</li>)
+      )}
+    </div>
+  );
 }
+
+
 ```  
 
 
