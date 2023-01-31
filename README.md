@@ -79,7 +79,9 @@ const useRandomNumber=()=>{
 }  
 
 export {useRandomNumber}
-```  
+
+```   
+
 # 2 Querying Data
 ## Query keys
 - Identify query
@@ -92,9 +94,15 @@ useQuery(["labels", labelName], fetchLabel);
 useQuery(["issues", {completed: false}], fetchIssues);  
 ```  
 - Key should follow ` Generic To Specific `  pattern  with a starting string which identify the kind of data.  
-``` useQuery(["issues", owner, repo], queryFn); ``` This pattern will help to accidentally creating duplicate query keys.
-- When use Objects in Query Keys??
-When we are filtering by more than one thing and any parameter can refetch the query without breaking the order.
+
+``` useQuery(["issues", owner, repo], queryFn);   
+```  
+This pattern will help to accidentally creating duplicate query keys.  
+
+- When use Objects in Query Keys??  
+
+When we are filtering by more than one thing and any parameter can refetch the query without breaking the order.  
+
 ```  
 const issuesQuery = useQuery(
     [
@@ -115,7 +123,9 @@ const issuesQuery = useQuery(
 - Make data request
 ### Query function argument  
 1.   Can pass any parameter to query function like arrow function.
-2.   1st parameter is an object containing query keys. So we can use key values as Query Function Arguments
+2.   1st parameter is an object containing query keys. So we can use key values as Query Function Arguments.  
+
+```  
 
 async function getGithubUser({ queryKey }) {
   const [user, username] = queryKey;
@@ -128,7 +138,8 @@ const User = ({ username }) => {
   const userQuery = useQuery(
     ["user", username],
     getGithubUser,
-  );  
+  );    
+  
   ```  
   
 ### Queries with custom hook  
