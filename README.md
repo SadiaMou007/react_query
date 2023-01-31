@@ -203,3 +203,38 @@ const [repos, gists] = reposAndGistsQuery.data;
  ```  
  - useQueries : accepts an array of query options and returns an array of query results. [React query docs](https://tanstack.com/query/latest/docs/react/reference/useQueries?from=reactQueryV3&original=https%3A%2F%2Ftanstack.com%2Fquery%2Fv3%2Fdocs%2Freference%2FuseQueries)
  
+ ### Dependent Query  
+ - When second request will attempt to use the data from the first request, even though that data hasn't been loaded yet. We need a configuration object `enabled` to define when the second query will run.
+ ```  
+ useQuery(
+  queryKey,
+  queryFn,
+  configuration
+)
+```  
+- To avoid long time Loding in UI (for second query data), we can use `fetchStatus` .If status is loading and fetchStatus is idle, then we can know the query is disabled. 
+- querying two APIs. (labels & issues). Where issues are dependent to labels Id. ( Use label Id as parameter for fetch issues)
+```  
+export default function App() {
+
+  const [id,setId]=useState(null)
+  const {data:labels,isLoading:isLabelLoading}=useQuery(['labels'],()=>
+    fetch(`https://ui.dev/api/courses/react-query/labels`)
+    .then(res=>res.json())
+  )
+  
+  const {data:issues,isLoading:isIssuesLoading,fetchStatus}=useQuery(['issues',{id}],()=>
+    fetch(`https://ui.dev/api/courses/react-query/issues?/labels[]=${id}`)
+    .then(res=>res.json()),
+    {enabled: !!id}
+  )
+
+  return <div>
+    {isLabelLoading? <p>Loading..</p>:labels.map(label=>  <div><button onClick={()=>setId(label.id)}>{label.name}</button></div>)}
+    {fetchStatus==='idle' && isIssuesLoading?null:
+    isIssuesLoading? <p>Loading..</p>:issues.map(issue=>  <li>{issue.title}</li>)}
+  </div>;
+}
+```  
+
+
