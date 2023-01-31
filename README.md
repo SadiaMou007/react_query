@@ -161,4 +161,23 @@ function useGithubIssuesQuery({ owner, repo}) {
 }
 ```  
 
+### Fetch single user with variable parameter
+```  
+import { useQuery } from "react-query";
+const getUserData = (id) => {
+  //get user data by assignee or created by
+
+  const userData = useQuery(["issues", id], () =>
+    fetch(`api/users/${id}`).then((res) => res.json())
+  );
+  return { userData };
+};
+export { getUserData };  
+
+```  
+```  
+ const { userData: assigneeUser } = getUserData(assignee);
+ const { userData: createdByUser } = getUserData(createdBy);  
+```  
+
 
