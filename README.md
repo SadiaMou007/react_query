@@ -269,10 +269,35 @@ const issuesQuery = useQuery(["issues", { labels, status }], () => {
 ``` 
 - Example url: `/api/issues?labels[]=bug&labels[]=enhancement&status=done` 
 ## 3. Resilient (saktisali :) )Queries   
-### CACHE STATES AND REACT QUERY DEVTOOLS
-- React Query Devtools visualize internal states which React Query manages for each entry in the cache. 
+### CACHE STATES AND   
+A query only has the loading state the first time it loads and there's no data, while the fetching state is used by the query cache any time a query is refetched, including the first time.   
 - Query cache states:
-  Idle - the query doesn't need to be fetched 
-  Fetching  
-  Paused
+  `Idle/fresh`- the query doesn't need to be fetched  
+  `Fetching`  
+  `Paused`  
+- How react query know to refetch a query?  
+React Query uses another set of states: `fresh` and `stale`  
+
+- `Stale` vs `fresh`  
+Stale : need refetch  
+Fresh : no refresh needed  
+- Refetch query after 1 minute:
+```  
+const userQuery = useQuery(
+  ["user", username],
+  () =>
+    fetch(`https://api.github.com/users/${username}`)
+    .then(res => res.json()),
+  { staleTime: 1000 * 60 }
+);
+
+```  
+`  { staleTime: Infinity }` will keep data fresh forever.
+
+
+### REACT QUERY DEVTOOLS  
+- React Query Devtools visualize internal states which React Query manages for each entry in the cache. This makes it easy to see what queries have been made, which ones are stale, when queries refetch, and much more.  
+
+- 
+
 
