@@ -267,4 +267,12 @@ const issuesQuery = useQuery(["issues", { labels, status }], () => {
     );
   }); 
 ``` 
-- Example url: `/api/issues?labels[]=bug&labels[]=enhancement&status=done`
+- Example url: `/api/issues?labels[]=bug&labels[]=enhancement&status=done` 
+## 3. Resilient (saktisali :) )Queries   
+### CACHE STATES AND REACT QUERY DEVTOOLS
+- React Query Devtools visualize internal states which React Query manages for each entry in the cache. 
+- Query cache states:
+  Idle - the query doesn't need to be fetched 
+  Fetching  
+  Paused
+
