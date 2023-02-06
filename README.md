@@ -180,7 +180,7 @@ export { getUserData };
  const { userData: createdByUser } = getUserData(createdBy);  
 ```  
 
-### Parallel Query  
+### PARALLEL QUERY  
 - It combining the two requests into a single query. We use the ` Promise.all ` helper to load both requests in parallel in the query function, pass that to a single useQuery hook, and get results from both at the same time.  
 ```  
 function getReposAndGists(username) {
@@ -257,7 +257,7 @@ export default function App() {
 
 ```  
 
-### Fetch with dynamic url  
+### FETCH WITH SYNAMIC URL  
 ```  
 const issuesQuery = useQuery(["issues", { labels, status }], () => {
     const statusString = status ? `&status=${status}` : "";
@@ -269,14 +269,14 @@ const issuesQuery = useQuery(["issues", { labels, status }], () => {
 ``` 
 - Example url: `/api/issues?labels[]=bug&labels[]=enhancement&status=done` 
 ## 3. Resilient (saktisali :) )Queries   
-### CACHE STATES AND   
+### CACHE STATES   
 A query only has the loading state the first time it loads and there's no data, while the fetching state is used by the query cache any time a query is refetched, including the first time.   
 - Query cache states:
   `Idle/fresh`- the query doesn't need to be fetched  
   `Fetching`  
   `Paused`  
 - How react query know to refetch a query?  
-React Query uses another set of states: `fresh` and `stale`  
+React Query uses another set of states: `fresh` and `stale`. React Query automatically re-fetches queries as soon as they transition from fresh to stale.    
 
 - `Stale` vs `fresh`  
 Stale : need refetch  
@@ -294,10 +294,28 @@ const userQuery = useQuery(
 ```  
 `  { staleTime: Infinity }` will keep data fresh forever.
 
+### TRIGERING A REFETCH  
+- 1st refetch: When component mount first time. If already mount -->  unmount (refetch if data in `stale` state) --> mount again.  
+- 2nd refetch: When user re-focus on window. (can be disabled for individual useQuery calls by setting the refetchOnWindowFocus option to false)  
+- 3rd Refetch: Network re-connect. (can be disabled setting the refetchOnReconnect config option to false)  
+- 4th optional Interval: enable by using `refetchInterval` It will refetch whether the query is stale or fresh.  
+
+### CACHE CLEARING  
+- By default, when a query has been inactive for more than 5 minutes, React Query clears it out.
+- or we can use `cacheTime` to handle cache clearing time.  
+- Example: remove a query from the cache immediately by setting the cacheTime option to 0  
+```  
+const userQuery = useQuery(
+  ["user", username],
+  () =>
+    fetch(`https://api.github.com/users/${username}`)
+    .then(res => res.json()),
+  { cacheTime: 0 }
+);
+```  
 
 ### REACT QUERY DEVTOOLS  
 - React Query Devtools visualize internal states which React Query manages for each entry in the cache. This makes it easy to see what queries have been made, which ones are stale, when queries refetch, and much more.  
 
-- 
 
 
