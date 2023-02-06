@@ -257,4 +257,14 @@ export default function App() {
 
 ```  
 
-
+### Fetch with dynamic url  
+```  
+const issuesQuery = useQuery(["issues", { labels, status }], () => {
+    const statusString = status ? `&status=${status}` : "";
+    const labelsString = labels.map((label) => `labels[]=${label}`).join("&");
+    return fetch(`/api/issues?${labelsString}${statusString}`).then((res) =>
+      res.json()
+    );
+  }); 
+``` 
+- Example url: `/api/issues?labels[]=bug&labels[]=enhancement&status=done`
