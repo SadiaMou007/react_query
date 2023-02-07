@@ -317,5 +317,15 @@ const userQuery = useQuery(
 ### REACT QUERY DEVTOOLS  
 - React Query Devtools visualize internal states which React Query manages for each entry in the cache. This makes it easy to see what queries have been made, which ones are stale, when queries refetch, and much more.  
 
+- import : `import { ReactQueryDevtools } from "react-query/devtools" `  
+- Wrap inside queryClientProvider ` <ReactQueryDevtools />`  
+- For keep query data `fresh` set 3rd parameter of query function as  
+``` {
+      staleTime: 1000 * 60 * 5,
+    }  
+```  
+
+
+
 
 
