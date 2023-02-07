@@ -320,10 +320,25 @@ const userQuery = useQuery(
 - import : `import { ReactQueryDevtools } from "react-query/devtools" `  
 - Wrap inside queryClientProvider ` <ReactQueryDevtools />`  
 - For keep query data `fresh` set 3rd parameter of query function as  
-``` {
-      staleTime: 1000 * 60 * 5,
-    }  
 ```  
+{
+   staleTime: 1000 * 60 * 5,
+}  
+```  
+### ERROR HANDLING  
+- use onError callback  
+```  
+const Users = () => {
+  const userQuery = useQuery(
+    "users",
+    () => fetchWithError("/users"),
+    { onError: (error) => toast.error(error.message) }
+  )
+
+  // Render the loading state and data
+}  
+```  
+- We can use `{retry:false}` parameter to stop refetch. (In case refetch gives an error but we want cache data)
 
 
 
