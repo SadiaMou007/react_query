@@ -341,7 +341,7 @@ const Users = () => {
 - We can use `{retry:false}` parameter to stop refetch. (In case refetch gives an error but we want cache data)
 
 
-### 4. The Query Client 
+## 4. The Query Client 
 ### Query client with default parameter (can still override them for each useQuery, if needed.) ***
 ```  
 const queryClient = new QueryClient({
@@ -397,5 +397,49 @@ const Search() {
   );
 }  
 ```  
+## 5. Keeping Data Fresh
+- Manual query invalidation  
+React Query will only ever refetch active queries - that is, queries that are being used by components that are currently mounted. inactive queries remain in the cache until their cacheTime expires, which is 5 minutes by default.  
+### Refetching Queries  
+- We can refetch a query with the `queryClient.refetchQueries` method.  
+- When the user clicks this button, React Query will have every query that matches the provided query key refetch in the background.  
+```  
+const RefetchButton = ({org, repo}) => {
+  const queryClient = useQueryClient();
 
+  return (
+    <button onClick={() =>
+      queryClient.refetchQueries(['repo', org, repo])
+      }>
+      Refresh
+    </button>
+  );
+};
+```  
+- ` queryClient.refetchQueries ` will refetch both active and inactive queries. (when need to refetch an active queries).
+-  `queryClient.invalidateQueries` will refetch inactive queries only.
+
+```  
+import * as React from "react";
+import { queryClient, useQuery } from "react-query";
+
+export default function App() {
+  const {data,isLoading,isStale}=useQuery(['user'],()=>{
+  return fetch(`https://ui.dev/api/courses/react-query/users`)
+  .then(res=>res.json())
+  },
+  {staleTime:5*1000}
+  )
+
+  return <div>{isLoading ? <p>Loading..</p>:
+  data.map(user=> <p>{user.name}</p>)
+  }
+  {isStale && <button 
+  onClick={()=>queryClient.refetchQueries(['user'])}
+  >
+    Refetch
+  </button>}
+  </div>;
+}
+```  
 
