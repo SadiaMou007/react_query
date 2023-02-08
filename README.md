@@ -341,6 +341,61 @@ const Users = () => {
 - We can use `{retry:false}` parameter to stop refetch. (In case refetch gives an error but we want cache data)
 
 
+### 4. The Query Client 
+### Query client with default parameter (can still override them for each useQuery, if needed.) ***
+```  
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 3 * 1000,
+      cacheTime: 10 * 1000,
+      retry: 1,
+      useErrorBoundry: true,
+      onError: (error => {
+      }),
+      refetchOnWindowFocus: false,
+    },
+    mutations: {}
+  },
+})  
+```  
 
+### Default query function ...
+### Imperative Query Fetching
+- Use `queryClient.fetchQuery`
+- If we want to Perform a search, grab the top result, and immediately trigger a navigation to the relevant page using React Router's navigate function without displaying results.
+```  
+const Search() {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  async function handleSearch(query) {
+    try {
+      const data = await queryClient.fetchQuery(
+        ['search', query],
+        performSearch
+      );
+
+      const topResult = data?.results[0];
+
+      if (!topResult) throw new Error('No results found');
+      
+      navigate(topResult.url);
+    } catch(error) {
+      // handle error
+    }
+  }
+
+  return (
+    <form onSubmit={event => {
+      event.preventDefault();
+      handleSearch(event.target.query.value);
+    }}>
+      <input name="query" />
+      <button type="submit">Search</button>
+    </form>
+  );
+}  
+```  
 
 
