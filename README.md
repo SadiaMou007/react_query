@@ -434,7 +434,7 @@ Refetch/Invalidate
         
 
 ### Refetching Queries  
-- We can refetch a query with the `queryClient.refetchQueries` method.  
+- We can refetch a query with the `queryClient.refetchQueries` method. queryClient use `useQueryClient` hook () 
 - When the user clicks this button, React Query will have every query that matches the provided query key refetch in the background.  
 ```  
 const RefetchButton = ({org, repo}) => {
@@ -514,3 +514,33 @@ const userQuery = useQuery(
       </button>  
  ```  
  
+### SHOW REFETCHING STATES (isFetching)  
+- Configur for single query : use `isFetching`  
+- Configure for all queries:  
+step 1: Create queryLoader component, Which will call Loader component by checking if the query is refetching.(useIsFetching hook)  
+```  
+const QueryLoader = () => {
+  const isFetching = useIsFetching();
+
+  if (isFetching) {
+    return (
+      <div className="query-loader">
+        <LoadingSpinner />
+      </div>
+    )
+  }
+  return null;
+}  
+
+```  
+step 2: Place queryLoader component inside `<QueryClientProvider>`  
+```  
+root.render(
+  <QueryClientProvider client={queryClient}>
+    <App />
+    <QueryLoader />
+  </QueryClientProvider>,
+);  
+```  
+- Configure for specific queries using query key: `const isFetching = useIsFetching(["repo", owner, repo])`
+
