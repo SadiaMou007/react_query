@@ -495,3 +495,22 @@ case 5: `queryClient.refetchQueries({stale: true, type: "inactive"})` refetch qu
 
 ##  
 
+##  
+### QUERY CANCELLATION ( *** usefull for every request (specially search) so that If a request is cancelled before it is sent, the server won't have to spend resources responding to it. )  
+- By default query will cancel when - component unmount before query resolve or query key chage in mid request.  
+- Cancel fetch request (pass signal parameter to fetch api and use)
+```  
+const userQuery = useQuery(
+  ["users"], 
+  ({signal}) => fetch("/api/users", {signal})
+    .then(res => res.json())
+);  
+```  
+- Cancel query manually: use signal parameter in request and call `queryClient.cancelQueries` with query key  
+ 
+```  
+<button onClick={() => queryClient.cancelQueries(["users"])}>
+        Cancel User Query
+      </button>  
+ ```  
+ 
