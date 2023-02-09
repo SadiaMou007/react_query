@@ -416,8 +416,8 @@ const RefetchButton = ({org, repo}) => {
   );
 };
 ```  
-- ` queryClient.refetchQueries ` will refetch both active and inactive queries. (when need to refetch an active queries).
--  `queryClient.invalidateQueries` will refetch inactive queries only.
+- ` queryClient.refetchQueries ` will refetch all queries  `active`, `inactive`, `fresh` or `stale`. (use when need to refetch an active queries).
+-  `queryClient.invalidateQueries` will refetch inactive/stale queries only.
 
 ```  
 import * as React from "react";
@@ -442,4 +442,22 @@ export default function App() {
   </div>;
 }
 ```  
+### Query Filters  
+Query can be refetch using filter by `keys`, `type`,  and `stale`
+- Example Queries  
+```  
+const repoQuery = useQuery(['repo', org, repo]);
+const repoIssuesQuery = useQuery(['repo', org, repo, 'issues']);
+const openIssuesQuery = useQuery(['repo', org, repo, 'issues', {state: 'open'}]);  
+```  
+case 1: `queryClient.refetchQueries()` refetch all queries  
+case 2: `queryClient.refetchQueries(['repo', org, repo])` refetch all queries. (keys will match from starting, This case all query has this 3 keys)  
+case 3: `queryClient.refetchQueries(['repo', org, repo, "issues"])` refetch last 2 queries
+case 4: `queryClient.refetchQueries(
+  ['repo', org, repo, "issues"],
+  {exact: true}
+);` fetch the query which exactly match with this query keys. In this case refetch only 3rd query  
+case 5: `queryClient.refetchQueries({stale: true, type: "inactive"})` refetch query which is stale and inactive  
+
+
 
