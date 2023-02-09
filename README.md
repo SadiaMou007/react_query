@@ -400,6 +400,39 @@ const Search() {
 ## 5. Keeping Data Fresh
 - Manual query invalidation  
 React Query will only ever refetch active queries - that is, queries that are being used by components that are currently mounted. inactive queries remain in the cache until their cacheTime expires, which is 5 minutes by default.  
+### Summery  
+- If refetch single query (use refetch())  
+
+```  
+import { useQuery, useQueryClient } from "react-query";
+...  
+<button
+  onClick={() => {
+   query1.refetch();
+  }}
+>
+Refetch/Invalidate
+</button>  
+```  
+- If refetch multiple query (use invalidateQueries/ refetchQueries). 
+
+```  
+import { useQuery, useQueryClient } from "react-query";
+...  
+  const queryClient = useQueryClient();  
+...  
+
+
+<button
+  onClick={() => {
+   queryClient.invalidateQueries(["random"]);
+  }}
+>
+Refetch/Invalidate
+</button>  
+```  
+        
+
 ### Refetching Queries  
 - We can refetch a query with the `queryClient.refetchQueries` method.  
 - When the user clicks this button, React Query will have every query that matches the provided query key refetch in the background.  
@@ -442,7 +475,7 @@ export default function App() {
   </div>;
 }
 ```  
-### Query Filters  
+### Refetching Query with Filters  
 Query can be refetch using filter by `keys`, `type`,  and `stale`
 - Example Queries  
 ```  
