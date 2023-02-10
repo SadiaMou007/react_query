@@ -498,7 +498,7 @@ case 5: `queryClient.refetchQueries({stale: true, type: "inactive"})` refetch qu
 ##  
 ### QUERY CANCELLATION ( *** usefull for every request (specially search) so that If a request is cancelled before it is sent, the server won't have to spend resources responding to it. )  
 - By default query will cancel when - component unmount before query resolve or query key chage in mid request.  
-- Cancel fetch request (pass signal parameter to fetch api and use)
+- Cancel fetch request (pass signal parameter to fetch api and use) ***  
 ```  
 const userQuery = useQuery(
   ["users"], 
@@ -543,4 +543,63 @@ root.render(
 );  
 ```  
 - Configure for specific queries using query key: `const isFetching = useIsFetching(["repo", owner, repo])`
+
+### PREFETCHING QUERIES
+- Summery: 1. placeholder data 2. Initial data 3. Preloaded data  
+- PLACEHOLDER DATA: Add default value of query data which will `not store in cache`  
+```  
+import * as React from "react";
+import { useQuery } from "react-query";
+
+const  fetchUser=({queryKey})=> {
+  const [user,userId]=queryKey
+  console.log(userId)
+  return fetch(`https://ui.dev/api/courses/react-query/users/${userId}`).then(res=>res.json())
+}
+export default function UserProfilePicture({ userId }) {
+  const user=useQuery(['user',userId],fetchUser,{
+    placeholderData:{profilePictureUrl:`https://unsplash.it/200`}
+  })
+console.log(user.data)
+  return <div>{user.isLoading ? 'Loading..':<img src={user.data.profilePictureUrl} alt='bb'/>}</div>;
+}
+```  
+- For dependent query need to avoid placeholder value  
+```  
+{
+    enabled: !userQuery.isPlaceholderData 
+      && userQuery.data?.login,
+ }  
+ ```  
+ - INITIAL DATA  
+ - Add default value of query data which will `store in cache`  
+ - We can use hardcoded data / data from another query as initial data.
+ For Independent query  
+ 
+ ```  
+ const adminUsersQuery = useQuery(
+  ["adminUsers"],
+  fetchAdminUsers,
+  {
+    initialData: hardCodedAdminUsers,
+  }
+)  
+```  
+For Dependent query: use `queryClient.getQueryData` with specific query keys and use a function as 3rd parameter  
+
+```  
+const queryClient = useQueryClient();
+const issueDetailQuery = useQuery(
+  ["issue", repo, owner, issueNumber],
+  fetchIssue,
+  {
+    initialData: () => {
+      const issues = queryClient.getQueryData(["issues", repo, owner])
+      if (!issues) return undefined;
+      const issue = issues.find(issue => issue.number === issueNumber)
+      return issue;
+    }
+  },
+)  
+```  
 
