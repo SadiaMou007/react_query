@@ -604,4 +604,5 @@ const issueDetailQuery = useQuery(
 )  
 ```  
 - PRELOADED DATA  
-[https://codesandbox.io/s/3btjig?file=/App.js&utm_medium=sandpack](Example)
+- [https://ui.dev/c/react-query/solution-preloading-data]
+[https://codesandbox.io/s/3btjig?file=/App.js&utm_medium=sandpack]
