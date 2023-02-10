@@ -573,7 +573,8 @@ console.log(user.data)
  ```  
  - INITIAL DATA  
  - Add default value of query data which will `store in cache`  
- - We can use hardcoded data / data from another query as initial data.
+ - We can use hardcoded data / data from another query as initial data.  
+ 
  For Independent query  
  
  ```  
@@ -602,4 +603,5 @@ const issueDetailQuery = useQuery(
   },
 )  
 ```  
-
+- PRELOADED DATA  
+[https://codesandbox.io/s/3btjig?file=/App.js&utm_medium=sandpack](Example)
