@@ -606,3 +606,93 @@ const issueDetailQuery = useQuery(
 - PRELOADED DATA  
 - [https://ui.dev/c/react-query/solution-preloading-data]
 [https://codesandbox.io/s/3btjig?file=/App.js&utm_medium=sandpack]
+## 6. Mutations    
+
+A mutation is any function that causes a side effect - most commonly changing the state of some data outside of the function.  
+- useMutation vs useQuery:   
+`useQuery runs declaratively`. As soon as the component mounts, it fetches the data. `useMutation is imperative`, only firing off the request when you call the `mutation.mutate` method.  
+The second difference between useMutation and useQuery in the parameters - you don't have to pass a query mutation key, just the mutation function. This implies another difference - mutation results aren't cached like query results are. If you make a mutation in one component, you won't be able to access the response data in another component without sending it some other way.  
+
+###  Mutation Resets  
+changeNameMutation.reset()
+
+### Direct Cache Updates  
+```  
+const changeNameMutation = useMutation(changeName, {
+  onSuccess: (data) => {
+    queryClient.setQueryData(
+      ["user"],
+      (oldUser) => ({
+        ...user,
+        name: data.name
+      })
+    )
+  }
+});  
+```  
+### Query Invalidation
+```  
+const updateIssueStatusMutation = useMutation(
+  updateIssueStatus, 
+  {
+    onSettled: (data, variables) => {
+      queryClient.invalidateQueries(
+        ["issues", variables.org, variables.repo]
+      )
+    }
+  }
+)  
+```  
+### EXAMPLE  
+```  
+import { useMutation, useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
+
+export default function AddIssue() {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const addIssue = useMutation(
+    (issueBody) =>
+      fetch(`/api/issues`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(issueBody),
+      }).then((res) => res.json()),
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(["issues"], { exact: true });
+        queryClient.setQueryData(["issues", data.number.toString()], data);
+        navigate(`/issue/${data.number}`);
+      },
+    }
+  );
+  return (
+    <div className="add-issue">
+      <h2>Add Issue</h2>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (addIssue.isLoading) return;
+          addIssue.mutate({
+            comment: event.target.comment.value,
+            title: event.target.title.value,
+          });
+        }}
+      >
+        <label htmlFor="title">Title</label>
+        <input type="text" id="title" placeholder="Title" name="title" />
+        <label htmlFor="comment">Title</label>
+        <textarea id="comment" placeholder="Comment" name="comment" />
+        <button type="submit" disabled={addIssue.isLoading}>
+          {addIssue.isLoading ? "Adding Issue..." : "Add Issue"}
+        </button>
+      </form>
+    </div>
+  );
+}
+  
+```  
+
+### OPTIMISTIC UPDATES
+
