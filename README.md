@@ -695,4 +695,60 @@ export default function AddIssue() {
 ```  
 
 ### OPTIMISTIC UPDATES
+## 7. Pagination  
+- Keep previous page data untill get new data(avoid showing loading) : 3rd parameter: `{keepPreviousData: true}`
+- `isPreviousData` will indicate we are getting same data( add this option to disable next button along with checking empty data)  
+```  
+const Issues = ({org, repo}) => {
+  // ...
+  return (
+    <div>
+      {/* ... */}
+      <div>
+        <button
+          onClick={() => setPage(page => page - 1)}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <p>
+          Page {page} {issuesQuery.isFetching ? "..." : ""}
+        </p>
+        <button
+          onClick={() => setPage(page => page + 1)}
+          disabled={
+            !issuesQuery.data || 
+            issuesQuery.data.length === 0 || 
+            issuesQuery.isPreviousData
+          }
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  );
+}  
+```  
+### Preface next page  
+```  
+const Issues = ({org, repo}) => {
+  const queryClient = useQueryClient();
+  const [page, setPage] = useState(1);
+  const perPage = 10;
+  const issuesQuery = useQuery(
+    ["issues", org, repo, {page, perPage}],
+    fetchIssues,
+    {keepPreviousData: true}
+  );
+
+  useEffect(() => {
+    queryClient.prefetchQuery(
+      ["issues", org, repo, {page: page + 1, perPage}],
+      fetchIssues
+    );
+  }, [org, repo, page, perPage, queryClient]);
+
+  // ...
+}  
+```  
 
