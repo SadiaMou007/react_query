@@ -698,57 +698,64 @@ export default function AddIssue() {
 ## 7. Pagination  
 - Keep previous page data untill get new data(avoid showing loading) : 3rd parameter: `{keepPreviousData: true}`
 - `isPreviousData` will indicate we are getting same data( add this option to disable next button along with checking empty data)  
+
+- Preface next page : `queryClient.PrefetchQuery([keys],function)` inside useEffect  
+
 ```  
-const Issues = ({org, repo}) => {
-  // ...
+import * as React from "react";
+import { useQuery, useQueryClient } from "react-query";
+
+async function fetchIssues(page = 1) {
+  return fetch(
+    `https://ui.dev/api/courses/react-query/issues?limit=10&page=${page}`
+  ).then((res) => res.json());
+}
+
+export default function App() {
+  const [page, setPage] = React.useState(1);
+  const issuesQuery = useQuery(["issues", { page }], () => fetchIssues(page), {
+    keepPreviousData: true
+  });
+
+  const queryClient = useQueryClient();
+  React.useEffect(() => {
+    queryClient.prefetchQuery(["issues", { page: page + 1 }], () =>
+      fetchIssues(page + 1)
+    );
+  }, [page, queryClient]);
   return (
     <div>
-      {/* ... */}
-      <div>
+      <h1>Issues</h1>
+      {issuesQuery.isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <ul>
+          {issuesQuery.data.map((issue) => (
+            <li key={issue.id}>{issue.title}</li>
+          ))}
+        </ul>
+      )}
+      <div className="pagination">
         <button
-          onClick={() => setPage(page => page - 1)}
+          onClick={() => setPage((page) => page - 1)}
           disabled={page === 1}
         >
           Previous
         </button>
         <p>
-          Page {page} {issuesQuery.isFetching ? "..." : ""}
+          Page {page}
+          {issuesQuery.isFetching ? "..." : ""}
         </p>
         <button
-          onClick={() => setPage(page => page + 1)}
-          disabled={
-            !issuesQuery.data || 
-            issuesQuery.data.length === 0 || 
-            issuesQuery.isPreviousData
-          }
+          onClick={() => setPage((page) => page + 1)}
+          disabled={issuesQuery.data?.length < 10}
         >
           Next
         </button>
       </div>
     </div>
   );
-}  
-```  
-### Preface next page  
-```  
-const Issues = ({org, repo}) => {
-  const queryClient = useQueryClient();
-  const [page, setPage] = useState(1);
-  const perPage = 10;
-  const issuesQuery = useQuery(
-    ["issues", org, repo, {page, perPage}],
-    fetchIssues,
-    {keepPreviousData: true}
-  );
+}
 
-  useEffect(() => {
-    queryClient.prefetchQuery(
-      ["issues", org, repo, {page: page + 1, perPage}],
-      fetchIssues
-    );
-  }, [org, repo, page, perPage, queryClient]);
-
-  // ...
-}  
 ```  
 
