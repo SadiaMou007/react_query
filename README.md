@@ -759,3 +759,35 @@ export default function App() {
 
 ```  
 
+### INFINITE QUERIES(for infinite data)  
+- import `useInfiniteQuery from 'react-query'`
+- Diff 1:  Query function receives extra parameter called `pageParam`  
+```  
+const fetchInfiniteIssues = async ({queryKey, pageParam = 1}) => {
+  const [issues, org, repo] = queryKey
+  const response = await fetch(
+    `https://api.github.com/repos/${org}/${repo}/issues?page=${pageParam}`
+  )
+
+  const json = await response.json()
+  return json
+}  
+```  
+
+- `getNextPageParam` function is the 3rd argument of `useInfiniteQuery`. Whatever we return from the getNextPageParam function will be used as the pageParam argument whenever the next page is fetched. Argument `lastpage` is the last fetched page and `pages` is the previously fetched pages. 
+```  
+const issuesInfiniteQuery = useInfiniteQuery(
+  ['issues', org, repo],
+  fetchInfiniteIssues,
+  {
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage.length === 0) {
+        return;
+      }
+      return pages.length + 1;
+    }
+  }
+)  
+```  
+- for Cursored Infinite Pagination return `lastPage.nextCursor` from `getNextPageParam` function  
+- 
