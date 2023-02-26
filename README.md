@@ -774,7 +774,7 @@ const fetchInfiniteIssues = async ({queryKey, pageParam = 1}) => {
 }  
 ```  
 
-- `getNextPageParam` function is the 3rd argument of `useInfiniteQuery`. Whatever we return from the getNextPageParam function will be used as the pageParam argument whenever the next page is fetched. Argument `lastpage` is the last fetched page and `pages` is the previously fetched pages. 
+- Diff 2: `getNextPageParam` function is the 3rd argument of `useInfiniteQuery`. Whatever we return from the getNextPageParam function will be used as the pageParam argument whenever the next page is fetched. Argument `lastpage` is the last fetched page and `pages` is the previously fetched pages. 
 ```  
 const issuesInfiniteQuery = useInfiniteQuery(
   ['issues', org, repo],
@@ -790,4 +790,6 @@ const issuesInfiniteQuery = useInfiniteQuery(
 )  
 ```  
 - for Cursored Infinite Pagination return `lastPage.nextCursor` from `getNextPageParam` function  
-- 
+- Diff 3: The data is no longer just a list of data for the page. Instead, it's an object with pages as the list of pages and pageParams as the corresponding params that were used to fetch each page.  
+- Virtualized Lists(Instead of rendering every single item, virtualized lists only render the items that are visible to the user) (React virtual)(https://react-virtual.tanstack.com/examples/infinite-scroll)
+
