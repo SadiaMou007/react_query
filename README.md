@@ -791,5 +791,41 @@ const issuesInfiniteQuery = useInfiniteQuery(
 ```  
 - for Cursored Infinite Pagination return `lastPage.nextCursor` from `getNextPageParam` function  
 - Diff 3: The data is no longer just a list of data for the page. Instead, it's an object with pages as the list of pages and pageParams as the corresponding params that were used to fetch each page.  
-- Virtualized Lists(Instead of rendering every single item, virtualized lists only render the items that are visible to the user) (React virtual)(https://react-virtual.tanstack.com/examples/infinite-scroll)
+- Virtualized Lists(Instead of rendering every single item, virtualized lists only render the items that are visible to the user) (https://react-virtual.tanstack.com/examples/infinite-scroll)
 
+#### Load more data (2 way - using button or when scroll down)  
+- using button  
+```  
+ <button onClick={
+          () => issuesInfiniteQuery.fetchNextPage()
+        }
+        disabled={
+          !issuesInfiniteQuery.hasNextPage ||
+          issuesInfiniteQuery.isFetchingNextPage
+        }
+      >
+        {issuesInfiniteQuery.isFetchingNextPage ?
+          "Loading Next Page..." :
+          "Load More"}
+      </button>  
+  ```  
+      
+   - Load On Scroll steps  
+   1. create custom hook(useScrollToBottomAction) for listening to see if the user is at the bottom  
+   2. use this hook in our component to fetch next page.
+  ```  
+  useScrollToBottomAction(
+    document,
+    () => {
+      if (issuesInfiniteQuery.isFetchingNextPage) return;
+      issuesInfiniteQuery.fetchNextPage();
+    },
+    500
+  );
+```  
+#### Refetching Infinite Queries
+ it fetches the data the way it was fetched in the first place, one page at a time, starting from the first all the way to the most recently fetched. As it fetches each page, it re-runs getNextPageParam and uses that to fetch the next page. This ensures the data won't get into an invalid state, even if it changed since the first time it was fetched.  
+ #### Bi-Directional Infinite Queries
+We can call these "bi-directional" infintie queries, since they allow us to infinitely page both forwards and backwards. Adding the previous page fetching isn't hard either - all of the options and APIs for fetching the next page have a previous counterpart. That means we need to add a getPreviousPageParam option to get the previous page, call fetchPreviousPage to fetch it, and use hasPreviousPage and isFetchingPreviousPage to know whether there is a previous page and whether it is being fetched.  
+
+   
