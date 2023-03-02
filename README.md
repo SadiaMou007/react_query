@@ -826,6 +826,13 @@ const issuesInfiniteQuery = useInfiniteQuery(
 #### Refetching Infinite Queries
  it fetches the data the way it was fetched in the first place, one page at a time, starting from the first all the way to the most recently fetched. As it fetches each page, it re-runs getNextPageParam and uses that to fetch the next page. This ensures the data won't get into an invalid state, even if it changed since the first time it was fetched.  
  #### Bi-Directional Infinite Queries
-We can call these "bi-directional" infintie queries, since they allow us to infinitely page both forwards and backwards. Adding the previous page fetching isn't hard either - all of the options and APIs for fetching the next page have a previous counterpart. That means we need to add a getPreviousPageParam option to get the previous page, call fetchPreviousPage to fetch it, and use hasPreviousPage and isFetchingPreviousPage to know whether there is a previous page and whether it is being fetched.  
+We can call these "bi-directional" infintie queries, since they allow us to infinitely page both forwards and backwards. Adding the previous page fetching isn't hard either - all of the options and APIs for fetching the next page have a previous counterpart. That means we need to add a getPreviousPageParam option to get the previous page, call fetchPreviousPage to fetch it, and use hasPreviousPage and isFetchingPreviousPage to know whether there is a previous page and whether it is being fetched.   
+
+## 8. Advanced Queries  
+### React query with GraphQL
+### Real time update with websockets  
+### Suspense mode  
+Suspense is React's way of `coordinating loading states together` for asynchronous operations, and it's commonly used with components that fetch data or lazy load with React.lazy
+
 
    
