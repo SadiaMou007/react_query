@@ -833,6 +833,11 @@ We can call these "bi-directional" infintie queries, since they allow us to infi
 ### Real time update with websockets  
 ### Suspense mode  
 Suspense is React's way of `coordinating loading states together` for asynchronous operations, and it's commonly used with components that fetch data or lazy load with React.lazy
+### Render Optimization  
+- React Query will `always render twice` any time it fetches new data - Once when isFetching is set to true, and once when the data loads and isFetching goes back to false.  
+- React Query automatically tracks the properties on the query object that you use in the component. If we don't use the isFetching/.. property, React Query will not triggering a render when that isLoading/.. state change.  
+- Can select object property that will call re-render by using `notifyOnChange:['data'/'...']` (NOT RECOMMENDED)  
+
 
 
    
