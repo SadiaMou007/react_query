@@ -842,5 +842,50 @@ Suspense is React's way of `coordinating loading states together` for asynchrono
 ## 9. Production Ready React Query
 ### SERVER-SIDE RENDERING
 ### REACT QUERY WITH TYPESCRIPT
+#### Generic definition for useQuery looks like.  
+```  
+export declare type QueryKey = readonly unknown[];
+
+export declare function useQuery<
+  TQueryFnData = unknown,
+  TError = unknown,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey
+> (
+  queryKey: TQueryKey,
+  queryFn: QueryFunction<TQueryFnData, TQueryKey>,
+  options?: UseQueryOptions): UseQueryResult<TData, TError>;  
+  ```  
+ - Here TData refers Annotating Queries data with `select`. Example of using select to transform that data before it is used by the component.   
+ ```  
+const issuesQuery = useQuery(
+  ["issues", org, repo],
+  async () => {
+    const response = await fetch(
+      `https://api.github.com/repos/${org}/${repo}/issues`
+    )
+    const json: string[] = await response.json()
+    return json;
+  },
+  {
+    select: (data: Issue[]) => data.map(issue => issue.title)
+  }
+)  
+```  
+#### Example  
+```  
+const issuesQuery = useQuery<Issue[], Error, string[], queryKeyType >(
+  ["issues", org, repo],
+  async () => {
+    const response = await fetch(
+      `https://api.github.com/repos/${org}/${repo}/issues`
+    )
+    const json: string[] = await response.json()
+    return json;
+  },
+  {
+    select: (data: Issue[]) => data.map(issue => issue.title)
+  }
+)
 
    
