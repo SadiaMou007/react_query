@@ -839,5 +839,8 @@ Suspense is React's way of `coordinating loading states together` for asynchrono
 - Can select object property that will call re-render by using `notifyOnChange:['data'/'...']` (NOT RECOMMENDED)  
 
 
+## 9. Production Ready React Query
+### SERVER-SIDE RENDERING
+### REACT QUERY WITH TYPESCRIPT
 
    
